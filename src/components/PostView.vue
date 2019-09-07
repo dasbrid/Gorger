@@ -3,7 +3,10 @@
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--8-col">
         <div class="card-image__picture">
-          <img :src="this.catUrl"/>
+          <img v-if="this.catUrl" :src="this.catUrl"/>
+          <p v-if="!this.catUrl">
+          loading
+          </p>
         </div>
       </div>
       <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
@@ -13,7 +16,10 @@
         </div>
         <div class="actions">
           <a @click.prevent="postCat" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-            POST A CAT
+            Post
+          </a>
+          <a @click.prevent="reload" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+            Reload
           </a>
         </div>
       </div>
@@ -21,6 +27,8 @@
   </form>
 </template>
 <script>
+import axios from "axios" // for calling APIs
+
   // import parse from 'xml-parser'
   export default {
     data () {
@@ -28,24 +36,43 @@
         'catUrl': null
       }
     },
-    mounted () {
-      this.$http.get('https://thecatapi.com/api/images/get?format=xml&results_per_page=1',
-        {
-          headers: {
-            'Access-Control-Allow-Origin': '*' /*,
-            'Access-Control-Allow-Methods': 'GET',
-            'Access-Control-Allow-Headers': 'Access-Control-Allow-Methods, Access-Control-Allow-Origin, Origin, Accept, Content-Type',
-            'Content-Type': 'application/json',
-            'Accept': 'application/xml',
-            */
-          }
-        }
-      ).then(response => {
-        console.log(response)
-        // this.catUrl = parse(response.body).root.children['0'].children['0'].children['0'].children['0'].content
-      })
-    },
     methods: {
+        reload() {
+            this.fetchImage()
+        },
+        fetchImage() {
+        try{
+            axios.defaults.headers.common['x-api-key'] = "DEMO-API-KEY" // Replace this with your API Key
+            // let response = axios.get('https://api.thecatapi.com/v1/images/search', { params: { limit:1, size:"full" } } ) // Ask for 1 Image, at full resolution
+            axios.get('https://api.thecatapi.com/v1/images/search', { params: { limit:1, size:"full" } } ) // Ask for 1 Image, at full resolution
+            .then(response => {
+              // eslint-disable-next-line
+              console.log(response);
+              // this.image = response.data[0]
+              this.catUrl = response.data[0].url
+            })
+            .catch(error=> {
+              // eslint-disable-next-line
+              console.log(error);
+            })
+            // this.image = response.data[0] // the response is an Array, so just use the first item as the Image
+            // eslint-disable-next-line
+            console.log("-- Image from TheCatAPI.com")
+            // eslint-disable-next-line
+            // console.log(response.data)
+            //console.log("id:", this.image.id)
+            
+            // eslint-disable-next-line
+            //console.log("url:", this.image.url)
+        }catch(err){
+          // eslint-disable-next-line
+            //console.log(err)
+        }
+
+    }
+    },
+    mounted () {
+        this.reload()
     }
   }
 </script>
