@@ -1,4 +1,4 @@
-# cats-pwa
+# DogBase
 
 ## Project setup
 ```

@@ -1,6 +1,6 @@
 {
-  "name": "cats-pwa",
-  "short_name": "cats-pwa",
+  "name": "DogBase",
+  "short_name": "DogBase",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",

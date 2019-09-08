@@ -2,15 +2,15 @@
   <div class="mdl-grid">
     <div class="mdl-cell mdl-cell--8-col">
       <div class="picture">
-        <img :src="cat.url" />
+        <img :src="dog.url" />
       </div>
       <div class="info">
-        <span>{{ cat.info }}</span>
+        <span>{{ dog.info }}</span>
       </div>
     </div>
     <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
       <div class="comment">
-        <span>{{ cat.comment }}</span>
+        <span>{{ dog.comment }}</span>
       </div>
       <div class="actions">
         <router-link class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" to="/post">
@@ -28,29 +28,20 @@
   export default {
     data () {
       return {
-        url: null,
-        comment: null,
-        info: null,
-        cat: null
+        dog: null
       }
     },
     mounted () {
       let id = this.$route.params.id
       console.log(id)
-      // my code to get the cat from data
-      // this.cat = find(data.pictures, (cat) => cat['id'] === id)
-      // get cat from the DB
-      var cat
+      // get dog from the DB
+      var dog
       var docRef = db.collection("cats").doc(id)
       docRef.get()
       .then((doc) => { // we must use an anonymous fn so that "this" refers to the global this
         if (doc.exists) {
-            cat = {id: id, comment: doc.data().comment, url: doc.data().url, info: doc.data().info }
-            this.url = cat.url
-            this.comment = cat.comment
-            this.info = cat.info
-            this.cat = cat
-            console.log('cat ' + this.cat)
+            dog = {id: id, comment: doc.data().comment, url: doc.data().url, info: doc.data().info }
+            this.dog = dog
 
         } else {
             // doc.data() will be undefined in this case

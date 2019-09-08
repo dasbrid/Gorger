@@ -3,12 +3,12 @@
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--3-col mdl-cell mdl-cell--1-col-tablet mdl-cell--hide-phone"></div>
       <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-phone">
-        <div v-for="(cat, index) in this.cats" v-bind:key="index" class="image-card" @click="displayDetails(cat.id)">
+        <div v-for="(dog, index) in this.dogs" v-bind:key="index" class="image-card" @click="displayDetails(dog.id)">
           <div  class="image-card__picture">
-            <img :src="cat.url" />
+            <img :src="dog.url" />
           </div>
           <div class="image-card__comment mdl-card__actions">
-            <span>{{ cat.comment }}</span>
+            <span>{{ dog.comment }}</span>
           </div>
         </div>
       </div>
@@ -29,15 +29,15 @@
      },
     data () {
       return {
-        cats: []
+        dogs: []
       }
     },
     mounted() {
         // https://firebase.google.com/docs/firestore/query-data/get-data
         db.collection('cats').get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                var cat = {id: doc.id, comment: doc.data().comment, created_at: doc.data().comment, url: doc.data().url  }
-                this.cats.push(cat)
+                var dog = {id: doc.id, comment: doc.data().comment, created_at: doc.data().comment, url: doc.data().url  }
+                this.dogs.push(dog)
             
             });
         });
