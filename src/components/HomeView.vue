@@ -3,12 +3,12 @@
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--3-col mdl-cell mdl-cell--1-col-tablet mdl-cell--hide-phone"></div>
       <div class="mdl-cell mdl-cell--6-col mdl-cell--4-col-phone">
-        <div v-for="(picture, index) in this.pictures" v-bind:key="index" class="image-card" @click="displayDetails(picture.id)">
+        <div v-for="(cat, index) in this.cats" v-bind:key="index" class="image-card" @click="displayDetails(cat.id)">
           <div  class="image-card__picture">
-            <img :src="picture.url" />
+            <img :src="cat.url" />
           </div>
           <div class="image-card__comment mdl-card__actions">
-            <span>{{ picture.comment }}</span>
+            <span>{{ cat.comment }}</span>
           </div>
         </div>
       </div>
@@ -19,7 +19,8 @@
   </div>
 </template>
  <script>
-  import data from '../data'
+  import {db} from '../firebase';
+
   export default {
     methods: {
       displayDetails (id) {
@@ -28,8 +29,19 @@
      },
     data () {
       return {
-        'pictures': data.pictures,
+        cats: []
       }
+    },
+    mounted() {
+        // https://firebase.google.com/docs/firestore/query-data/get-data
+        db.collection('cats').get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                var cat = {id: doc.id, comment: doc.data().comment, created_at: doc.data().comment, url: doc.data().url  }
+                this.cats.push(cat)
+            
+            });
+        });
+
     }
   }
 </script>

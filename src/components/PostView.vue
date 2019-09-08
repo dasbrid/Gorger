@@ -11,7 +11,7 @@
       </div>
       <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-upgraded is-dirty">
-          <input id="username" v-model="title" type="text" class="mdl-textfield__input"/>
+          <input id="username" v-model="description" type="text" class="mdl-textfield__input"/>
           <label for="username" class="mdl-textfield__label">Describe me</label>
         </div>
         <div class="actions">
@@ -27,24 +27,39 @@
   </form>
 </template>
 <script>
-import axios from "axios" // for calling APIs
-
-  // import parse from 'xml-parser'
+import axios from "axios" // for calling 
+import {db} from '../firebase';
   export default {
     data () {
       return {
-        'catUrl': null
+        catUrl: null,
+        description: null
       }
     },
     methods: {
+        postCat() {
+            // https://firebase.google.com/docs/firestore/quickstart
+            db.collection('cats').add({comment: this.description,
+            created_at: -1 * new Date().getTime(),
+            info: 'some info',
+            url: this.catUrl
+            })
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
+        },
         reload() {
             this.fetchImage()
         },
         fetchImage() {
         try{
-            axios.defaults.headers.common['x-api-key'] = "DEMO-API-KEY" // Replace this with your API Key
-            // let response = axios.get('https://api.thecatapi.com/v1/images/search', { params: { limit:1, size:"full" } } ) // Ask for 1 Image, at full resolution
-            axios.get('https://api.thecatapi.com/v1/images/search', { params: { limit:1, size:"full" } } ) // Ask for 1 Image, at full resolution
+            // axios.defaults.headers.common['x-api-key'] = "DEMO-API-KEY" // Replace this with your API Key
+            axios.defaults.headers.common['x-api-key'] = "0a096f27-2762-424b-89b2-f11957d826fd" // Replace this with your API Key
+            // let response = axios.get('https://api.thedogapi.com/v1/images/search', { params: { limit:1, size:"full" } } ) // Ask for 1 Image, at full resolution
+            axios.get('https://api.thedogapi.com/v1/images/search', { params: { limit:1, size:"full" } } ) // Ask for 1 Image, at full resolution
             .then(response => {
               // eslint-disable-next-line
               console.log(response);

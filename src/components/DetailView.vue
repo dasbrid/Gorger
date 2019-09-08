@@ -21,23 +21,45 @@
   </div>
 </template>
 <script>
-  import { find } from 'lodash'
-  import data from '../data' // I added this
+  //import { find } from 'lodash'
+  import {db} from '../firebase';
+ 
+//  import data from '../data' // I added this
   export default {
     data () {
       return {
-        cat: null,
-        'pictures': data.pictures
-
+        url: null,
+        comment: null,
+        info: null,
+        cat: null
       }
     },
     mounted () {
-      // their code // this.cat = find(this.$root.cat, (cat) => cat['.key'] === this.$route.params.id)
       let id = this.$route.params.id
       console.log(id)
       // my code to get the cat from data
-      this.cat = find(data.pictures, (cat) => cat['id'] === id)
-      console.log(this.cat)
+      // this.cat = find(data.pictures, (cat) => cat['id'] === id)
+      // get cat from the DB
+      var cat
+      var docRef = db.collection("cats").doc(id)
+      docRef.get()
+      .then((doc) => { // we must use an anonymous fn so that "this" refers to the global this
+        if (doc.exists) {
+            cat = {id: id, comment: doc.data().comment, url: doc.data().url, info: doc.data().info }
+            this.url = cat.url
+            this.comment = cat.comment
+            this.info = cat.info
+            this.cat = cat
+            console.log('cat ' + this.cat)
+
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+        })
+      .catch(function(error) {
+            console.log("Error getting document:", error);
+      });
     }
   }
 </script>
