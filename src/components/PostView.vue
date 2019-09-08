@@ -44,8 +44,9 @@ import {db} from '../firebase';
             info: 'some info',
             url: this.catUrl
             })
-            .then(function(docRef) {
+            .then((docRef) => {
                 console.log("Document written with ID: ", docRef.id);
+                this.$router.push({name: 'home'})
             })
             .catch(function(error) {
                 console.error("Error adding document: ", error);
@@ -56,9 +57,7 @@ import {db} from '../firebase';
         },
         fetchImage() {
         try{
-            // axios.defaults.headers.common['x-api-key'] = "DEMO-API-KEY" // Replace this with your API Key
             axios.defaults.headers.common['x-api-key'] = "0a096f27-2762-424b-89b2-f11957d826fd" // Replace this with your API Key
-            // let response = axios.get('https://api.thedogapi.com/v1/images/search', { params: { limit:1, size:"full" } } ) // Ask for 1 Image, at full resolution
             axios.get('https://api.thedogapi.com/v1/images/search', { params: { limit:1, size:"full" } } ) // Ask for 1 Image, at full resolution
             .then(response => {
               // eslint-disable-next-line
@@ -70,18 +69,9 @@ import {db} from '../firebase';
               // eslint-disable-next-line
               console.log(error);
             })
-            // this.image = response.data[0] // the response is an Array, so just use the first item as the Image
             // eslint-disable-next-line
             console.log("-- Image from TheCatAPI.com")
-            // eslint-disable-next-line
-            // console.log(response.data)
-            //console.log("id:", this.image.id)
-            
-            // eslint-disable-next-line
-            //console.log("url:", this.image.url)
-        }catch(err){
-          // eslint-disable-next-line
-            //console.log(err)
+          }catch(err){
         }
 
     }

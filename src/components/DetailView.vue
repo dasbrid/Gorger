@@ -16,19 +16,31 @@
         <router-link class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" to="/post">
           ANSWER
         </router-link>
+                  <a @click.prevent="deleteItem" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+            Delete
+          </a>
       </div>
     </div>
   </div>
 </template>
 <script>
-  //import { find } from 'lodash'
   import {db} from '../firebase';
  
-//  import data from '../data' // I added this
   export default {
     data () {
       return {
         dog: null
+      }
+    },
+    methods: {
+      deleteItem() {
+        let id = this.$route.params.id
+        db.collection("cats").doc(id).delete().then(() => {
+            console.log("Document successfully deleted!");
+            this.$router.push({name: 'home'})
+        }).catch(function(error) {
+            console.error("Error removing document: ", error);
+        });
       }
     },
     mounted () {
